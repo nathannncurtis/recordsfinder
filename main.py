@@ -25,13 +25,15 @@ console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
 # Configuration - Primary directories
-FOLDER_MERGE_DIRS = [r'\\ronsyn\ClientServices', r'\\ronsyn\FaxDocs']
+FOLDER_MERGE_DIRS = [r'\\ronsyn\ClientServices', r'\\ronsyn\FaxDocs', r'\\ronsin250\Field Dailies']
 FILE_COPY_DIR = r'\\ronsyn\CSRs\CNR'
 
 # Configuration - Completed directories (only used if needed)
 COMPLETED_MERGE_DIRS = [
     r'\\ronsyn\ClientServices\_COMPLETED',
-    r'\\ronsyn\FaxDocs\(completed)'
+    r'\\ronsyn\FaxDocs\(completed)',
+    r'\\ronsin250\Field Dailies\!COMPLETED', 
+    r'\\ronsin250\Field Dailies\!SPECIALS'
 ]
 COMPLETED_FILE_DIR = r'\\ronsyn\CSRs\CNR\_COMPLETED'
 

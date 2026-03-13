@@ -1,35 +1,47 @@
 from cx_Freeze import setup, Executable
 import sys
 
-# Dependencies are automatically detected, but it might need fine-tuning.
+with open("version.txt", "r") as _vf:
+    APP_VERSION = _vf.read().strip()
+
 build_exe_options = {
-    "packages": ["os", "shutil", "ctypes", "sys", "concurrent.futures"],  # Added concurrent.futures
-    "excludes": [],
-    "include_files": ["records_finder_comline.ico"], #["ocr_finder_comline_no_folder.ico"] # Ensure the icon file is included
+    "packages": [
+        "os", "sys", "shutil", "ctypes", "sqlite3", "json",
+        "threading", "concurrent.futures", "subprocess",
+        "time", "logging", "tempfile", "traceback",
+        "urllib.request", "urllib.error",
+        "PyQt5.QtWidgets", "PyQt5.QtCore", "PyQt5.QtGui",
+    ],
+    "excludes": [
+        "tkinter", "matplotlib", "pandas", "scipy",
+        "numpy", "PIL",
+    ],
+    "include_files": [
+        "records_finder_comline.ico",
+        "version.txt",
+    ],
+    "optimize": 2,
+    "zip_include_packages": ["*"],
+    "zip_exclude_packages": [],
 }
 
-# Base setting for Windows
-base = None
-if sys.platform == "win32":
-    base = "Win32GUI"  # This will prevent the console window from appearing, change to None if you want the console
+# cx_Freeze 7+ renamed "Win32GUI" to "gui"
+import cx_Freeze
+_cx_major = int(cx_Freeze.__version__.split(".")[0]) if hasattr(cx_Freeze, "__version__") else 6
+base_gui = ("gui" if _cx_major >= 7 else "Win32GUI") if sys.platform == "win32" else None
 
-# Define the executables with the correct icon
 executables = [
-    #Executable("client_services_finder_comline.py", base=base, icon="ocr_finder_comline_no_folder.ico"),
-    #Executable("cnr_finder_comline.py", base=base, icon="ocr_finder_comline_no_folder.ico"),
-    #Executable("e-fax_finder_comline.py", base=base, icon="ocr_finder_comline_no_folder.ico"),
-    #Executable("ocr_finder_comline.py", base=base, icon="ocr_finder_comline_no_folder.ico", target_name= "OCR Puller"), 
-    #Executable("ocr_finder_comline_no_folder.py", base=base, icon="ocr_finder_comline_no_folder.ico", target_name="OCR Puller"), 
-    #Executable("records_finder_comline.py", base=base, icon="records_finder_comline.ico", target_name="Records Finder"),
-    Executable("temp_ocr_finder_comline_no_folder.py", base=base, icon="ocr_finder_comline_no_folder.ico", target_name="Temp OCR Puller"), 
-    
+    Executable("main.py", base=base_gui, icon="records_finder_comline.ico", target_name="Records Finder"),
+    Executable("tray.py", base=base_gui, icon="records_finder_comline.ico", target_name="Records Finder Tray"),
+    Executable("update_checker.py", base=base_gui, icon="records_finder_comline.ico"),
+    Executable("reg.py", base=None, icon="records_finder_comline.ico"),
+    Executable("unreg.py", base=None, icon="records_finder_comline.ico"),
 ]
 
-# Setup function
 setup(
-    name="TEMP OCR Puller",
-    version="1.0",
-    description="Batch Record Finder Tools",
+    name="Records Finder",
+    version=APP_VERSION,
+    description="Records Finder with Database-Backed Search and System Tray Configuration",
     options={"build_exe": build_exe_options},
-    executables=executables
+    executables=executables,
 )

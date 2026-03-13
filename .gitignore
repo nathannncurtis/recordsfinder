@@ -1,0 +1,13 @@
+build/
+dist/
+Output/
+tests/
+*.pyc
+__pycache__/
+*.db
+*.log
+.pytest_cache/
+*.egg-info/
+build.bat
+strip_signature.py
+setup.py

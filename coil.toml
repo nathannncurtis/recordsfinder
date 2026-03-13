@@ -1,0 +1,19 @@
+[project]
+name = "Records Finder"
+entry = "main.py"
+
+[build]
+mode = "bundled"
+os = "windows"
+python = "3.13"
+
+[build.dependencies]
+auto = true
+include = ["PyQt5"]
+
+[build.output]
+dir = "./dist"
+icon = "records_finder_comline.ico"
+
+[profile.release]
+secure = true
